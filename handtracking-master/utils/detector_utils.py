@@ -43,14 +43,18 @@ def load_inference_graph():
             serialized_graph = fid.read()
             od_graph_def.ParseFromString(serialized_graph)
             tf.import_graph_def(od_graph_def, name='')
-        sess = tf.Session(graph=detection_graph)
+        #config = tf.ConfigProto()
+        #config.gpu_options.per_process_gpu_memory_fraction = 0.75
+        gpus = tf.config.experimental.list_physical_devices('GPU')
+        tf.config.experimental.set_memory_growth(gpus[0], True)
+        sess = tf.Session(graph=detection_graph)#, config=config)
     print(">  ====== Hand Inference graph loaded.")
     return detection_graph, sess
 
 
 # draw the detected bounding boxes on the images
 # You can modify this to also draw a label.
-def draw_box_on_image(num_hands_detect, score_thresh, scores, boxes, im_width, im_height, image_np):
+def draw_box_on_image(num_hands_detect, score_thresh, scores, boxes, im_width, im_height, image_np, classify):
     for i in range(num_hands_detect):
         if (scores[i] > score_thresh):
             (left, right, top, bottom) = (boxes[i][1] * im_width, boxes[i][3] * im_width,
@@ -70,10 +74,10 @@ def draw_box_on_image(num_hands_detect, score_thresh, scores, boxes, im_width, i
 
             width = right - left
             height = bottom - top
-            right += width / 2
-            left -= width / 2
-            bottom += height / 2
-            top -= height / 2
+            right += width // 4
+            left -= width // 4
+            bottom += height // 4
+            top -= height // 4
 
             p1 = (int(left), int(top))
             p2 = (int(right), int(bottom))
@@ -84,7 +88,24 @@ def draw_box_on_image(num_hands_detect, score_thresh, scores, boxes, im_width, i
             gesture_image = cv2.resize(gesture_image, (gesture_image.shape[1] // 4, gesture_image.shape[0] // 4))
             background_mask = np.zeros((image_np.shape[0], image_np.shape[1], 3), dtype=np.uint8)
             background_mask[0:gesture_image.shape[0], 0:gesture_image.shape[1], :] = gesture_image
-            cv2.addWeighted(background_mask, 1, image_np, 1, 0, image_np)
+            #cv2.addWeighted(background_mask, 1, image_np, 1, 0, image_np)
+
+            top, bottom, left, right = map(int, (top, bottom, left, right))
+            #print(top, bottom, left, right)
+            img_h, img_w, img_c = image_np.shape
+            image_bgr = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR)
+            tpad, bpad, lpad, rpad = max(0, -top), max(0, bottom-img_h), max(0, -left), max(0, right-img_w)
+            try:
+                padded = cv2.copyMakeBorder(image_bgr,
+                    tpad, bpad, lpad, rpad,
+                    borderType=cv2.BORDER_REPLICATE)
+                hand = padded[ top-tpad:bottom-tpad, left-lpad:right-lpad, : ]
+                hand = cv2.resize(hand, (128, 128))
+                pred = classify(hand)
+                cv2.putText(image_np, pred, (200, 50),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.75, (77, 255, 9), 2)
+            except:
+                pass
 
             ### IMPORT TRAINED GESTURE MODEL, AND CLASSIFICATION/OVERLAY
             # output = model.predict_classes(img)

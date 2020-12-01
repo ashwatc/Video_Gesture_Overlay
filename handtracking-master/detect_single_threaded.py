@@ -27,7 +27,7 @@ if __name__ == '__main__':
         '-src',
         '--source',
         dest='video_source',
-        default=1,
+        default=0,
         help='Device index of the camera.')
     parser.add_argument(
         '-wd',
@@ -41,7 +41,7 @@ if __name__ == '__main__':
         '--height',
         dest='height',
         type=int,
-        default=180,
+        default=240,
         help='Height of the frames in the video stream.')
     parser.add_argument(
         '-ds',
@@ -70,6 +70,9 @@ if __name__ == '__main__':
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, args.width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, args.height)
 
+    #tf.config.experimental.set_per_process_memory_fraction(0.75)
+    #tf.config.experimental.set_per_process_memory_growth(True)
+
     start_time = datetime.datetime.now()
     num_frames = 0
     im_width, im_height = (cap.get(3), cap.get(4))
@@ -78,12 +81,30 @@ if __name__ == '__main__':
 
     cv2.namedWindow('Single-Threaded Detection', cv2.WINDOW_NORMAL)
 
+    #set up gesture classifier
+    from torchvision import transforms, models
+    import torch
+    model = models.mobilenet_v2(pretrained=True)
+    model.classifier = torch.nn.Sequential(torch.nn.Dropout(0.2),torch.nn.Linear(1280, 29))
+    model.load_state_dict(torch.load('gesturenet_weights'))
+    model.eval()
+    classes = ['A', 'B', 'C', 'D', 'del', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+        'L', 'M', 'N', 'nothing', 'O', 'P', 'Q', 'R', 'S', 'space',
+        'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    transform = transforms.Compose([
+        transforms.ToPILImage(),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406],[0.229, 0.224, 0.225])])
+    def classify_gesture(img): #expects 128 * 128 bgr image
+        model_input = torch.unsqueeze(transform(img), dim=0)
+        return classes[model(model_input).argmax()]
+
     while True:
         # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
-        ret, image_np = cap.read()
-        # image_np = cv2.flip(image_np, 1)
+        ret, image_np_bgr = cap.read()
         try:
-            image_np = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
+            # image_np = cv2.flip(image_np, 1)
+            image_np = cv2.cvtColor(image_np_bgr, cv2.COLOR_BGR2RGB)
         except:
             print("Error converting to RGB")
 
@@ -98,9 +119,12 @@ if __name__ == '__main__':
         # detector_utils.draw_box_on_image(num_hands_detect, args.score_thresh,
         #                                  scores, boxes, im_width, im_height,
         #                                  image_np)
+
+
         detector_utils.draw_box_on_image(1, args.score_thresh,
                                          scores, boxes, im_width, im_height,
-                                         image_np)
+                                         image_np, classify_gesture)
+
 
         # gesture_image = cv2.imread("overlay-icons/question.png")
         # gesture_image = cv2.resize(gesture_image, image_np.shape[0], image_np.shape[1])

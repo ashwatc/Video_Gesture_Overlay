@@ -102,6 +102,7 @@ def draw_box_on_image(num_hands_detect, score_thresh, scores, boxes, im_width, i
                 hand = padded[ top-tpad:bottom-tpad, left-lpad:right-lpad, : ]
                 hand = cv2.resize(hand, (128, 128))
                 pred = classify(hand)
+
                 cv2.putText(image_np, pred, (200, 50),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.75, (77, 255, 9), 2)
             except:

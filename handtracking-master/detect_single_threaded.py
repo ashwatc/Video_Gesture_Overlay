@@ -91,13 +91,16 @@ if __name__ == '__main__':
     classes = ['A', 'B', 'C', 'D', 'del', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
         'L', 'M', 'N', 'nothing', 'O', 'P', 'Q', 'R', 'S', 'space',
         'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    gestures = {'A':'fist', 'B':'palm', 'C':'other', 'D':'ok', 'del':'other', 'E':'fist', 'F':'ok', 'G':'other', 'H':'other', 'I':'other',
+        'J':'other', 'K':'peace','L':'finger', 'M':'down', 'N':'down', 'nothing':'other', 'O':'ok', 'P':'ok', 'Q':'other', 'R':'other',
+        'S':'fist', 'space':'other','T':'fist', 'U':'finger', 'V':'peace', 'W':'peace', 'X':'finger', 'Y':'peace', 'Z':'finger'}
     transform = transforms.Compose([
         transforms.ToPILImage(),
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406],[0.229, 0.224, 0.225])])
     def classify_gesture(img): #expects 128 * 128 bgr image
         model_input = torch.unsqueeze(transform(img), dim=0)
-        return classes[model(model_input).argmax()]
+        return gestures[classes[model(model_input).argmax()]]
 
     while True:
         # Expand dimensions since the model expects images to have shape: [1, None, None, 3]

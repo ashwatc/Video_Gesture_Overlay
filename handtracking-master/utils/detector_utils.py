@@ -30,10 +30,20 @@ categories = label_map_util.convert_label_map_to_categories(
     label_map, max_num_classes=NUM_CLASSES, use_display_name=True)
 category_index = label_map_util.create_category_index(categories)
 
+#initialize face haar cascade
+face_cascade = cv2.CascadeClassifier('utils/haarcascade_face.xml')
+
+gesture_images = {'fist':cv2.imread("overlay-icons/no.png", cv2.IMREAD_UNCHANGED),
+    'palm':cv2.imread("overlay-icons/question.png", cv2.IMREAD_UNCHANGED),
+    'ok':cv2.imread("overlay-icons/yes.png", cv2.IMREAD_UNCHANGED),
+    'peace':cv2.imread("overlay-icons/bye.png", cv2.IMREAD_UNCHANGED),
+    'finger':cv2.imread("overlay-icons/comment.png", cv2.IMREAD_UNCHANGED),
+    'afk':cv2.imread("overlay-icons/afk.png", cv2.IMREAD_UNCHANGED)}
+for ges in ('palm', 'ok', 'peace', 'finger', 'fist'):
+    gesture_images[ges] = cv2.resize(gesture_images[ges], (170, 170))
 
 # Load a frozen infrerence graph into memory
 def load_inference_graph():
-
     # load frozen tensorflow model into memory
     print("> ====== loading HAND frozen graph into memory")
     detection_graph = tf.Graph()
@@ -43,11 +53,11 @@ def load_inference_graph():
             serialized_graph = fid.read()
             od_graph_def.ParseFromString(serialized_graph)
             tf.import_graph_def(od_graph_def, name='')
-        #config = tf.ConfigProto()
-        #config.gpu_options.per_process_gpu_memory_fraction = 0.75
-        # gpus = tf.config.experimental.list_physical_devices('GPU')
-        # tf.config.experimental.set_memory_growth(gpus[0], True)
+
+        gpus = tf.config.experimental.list_physical_devices('GPU')
+        tf.config.experimental.set_memory_growth(gpus[0], True)
         sess = tf.Session(graph=detection_graph)#, config=config)
+
     print(">  ====== Hand Inference graph loaded.")
     return detection_graph, sess
 
@@ -83,91 +93,74 @@ def overlay_image_alpha(img, img_overlay, pos, alpha_mask):
         img[y1:y2, x1:x2, c] = (alpha * img_overlay[y1o:y2o, x1o:x2o, c] +
                                 alpha_inv * img[y1:y2, x1:x2, c])
 
-# draw the detected bounding boxes on the images
-# You can modify this to also draw a label.
-def draw_box_on_image(num_hands_detect, score_thresh, scores, boxes, im_width, im_height, image_np, classify):
-    # face detection
-    face_cascade = cv2.CascadeClassifier('utils/haarcascade_face.xml')
+def face_in_frame(image_np, overlay, draw_bounding_box=True):
     gray = cv2.cvtColor(image_np, cv2.COLOR_RGB2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.1, 4)
-    AFK = False
-
-    if len(faces) != 0:
-        AFK = False
+    if draw_bounding_box:
         for (x, y, w, h) in faces:
-            cv2.rectangle(image_np, (x, y), (x + w, y + h), (255, 0, 0), 3)
+            cv2.rectangle(overlay, (x, y), (x+w, y+h), (0, 0, 255), 3)
+    return len(faces) > 0
+
+def adjust_bounding_box(box, im_width, im_height):
+    (left, right, top, bottom) = (box[1] * im_width, box[3] * im_width,
+                                  box[0] * im_height, box[2] * im_height)
+    ### RESIZING BOUNDING BOX IMAGE (SQUARE + LARGE)
+    width = right - left
+    height = bottom - top
+    if (width > height):
+        diff = width - height
+        bottom += diff / 2
+        top -= diff / 2
     else:
-        AFK = True
+        diff = height - width
+        right += diff / 2
+        left -= diff / 2
+    width = right - left
+    height = bottom - top
+    right += width / 6
+    left -= width / 6
+    bottom += height / 6
+    top -= height / 6
 
-    for i in range(num_hands_detect):
-        if (scores[i] > score_thresh):
-            (left, right, top, bottom) = (boxes[i][1] * im_width, boxes[i][3] * im_width,
-                                          boxes[i][0] * im_height, boxes[i][2] * im_height)
+    #cap box Size
+    max_side_len = min(im_height, im_width)/2
+    if right-left > max_side_len or bottom-top > max_side_len:
+        vcenter, hcenter = (top+bottom)//2, (right+left)//2
+        top, bottom = vcenter-max_side_len//2, vcenter+max_side_len//2
+        left, right = hcenter-max_side_len//2, hcenter+max_side_len//2
+    top, bottom, left, right = map(int, (top, bottom, left, right))
+    return [left, right, top, bottom]
 
-            ### RESIZING BOUNDING BOX IMAGE (SQUARE + LARGE)
-            width = right - left
-            height = bottom - top
-            if (width > height):
-                diff = width - height
-                bottom += diff / 2
-                top -= diff / 2
-            else:
-                diff = height - width
-                right += diff / 2
-                left -= diff / 2
+def draw_box_and_classify(box, image_bgr, classify, im_width, im_height, overlay, draw_bounding_box=True):
+    left, right, top, bottom = box
+    if draw_bounding_box:
+        cv2.rectangle(overlay, (left, top), (right, bottom), (77, 255, 9), 3, 1)
 
-            width = right - left
-            height = bottom - top
-            right += width // 8
-            left -= width // 8
-            bottom += height // 8
-            top -= height // 8
+    try:
+        left_pad, right_pad, top_pad, bottom_pad = -min(0, left), max(0, right-im_width), -min(0, top), max(0, bottom-im_height)
+        padded = cv2.copyMakeBorder(image_bgr, top_pad, bottom_pad,
+            left_pad, right_pad, borderType=cv2.BORDER_REPLICATE)
+        hand = padded[ top+top_pad:bottom+top_pad, left+left_pad:right+left_pad, : ]
+        hand = cv2.resize(hand, (128, 128))
+        pred = classify(hand)
+        return pred
+    except:
+        return 'other'
 
-            p1 = (int(left), int(top))
-            p2 = (int(right), int(bottom))
-            cv2.rectangle(image_np, p1, p2, (77, 255, 9), 3, 1)
-
-            top, bottom, left, right = map(int, (top, bottom, left, right))
-            #print(top, bottom, left, right)
-            img_h, img_w, img_c = image_np.shape
-            image_bgr = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR)
-            tpad, bpad, lpad, rpad = max(0, -top), max(0, bottom-img_h), max(0, -left), max(0, right-img_w)
-            try:
-                padded = cv2.copyMakeBorder(image_bgr,
-                    tpad, bpad, lpad, rpad,
-                    borderType=cv2.BORDER_REPLICATE)
-                hand = padded[ top-tpad:bottom-tpad, left-lpad:right-lpad, : ]
-                hand = cv2.resize(hand, (128, 128))
-                pred = classify(hand)
-
-                ### OVERLAY PNG IMAGE OVER FRAME
-                if AFK:
-                    gesture_image = cv2.imread("overlay-icons/afk.png", cv2.IMREAD_UNCHANGED)
-                else:
-                    if pred == "fist": gesture_image = cv2.imread("overlay-icons/no.png", cv2.IMREAD_UNCHANGED)
-                    if pred == "palm": gesture_image = cv2.imread("overlay-icons/question.png", cv2.IMREAD_UNCHANGED)
-                    if pred == "ok": gesture_image = cv2.imread("overlay-icons/yes.png", cv2.IMREAD_UNCHANGED)
-                    if pred == "peace": gesture_image = cv2.imread("overlay-icons/bye.png", cv2.IMREAD_UNCHANGED)
-                    if pred == "finger": gesture_image = cv2.imread("overlay-icons/comment.png", cv2.IMREAD_UNCHANGED)
-
-                if AFK: gesture_image = cv2.resize(gesture_image, (image_np.shape[0], image_np.shape[1]))
-                else: gesture_image = cv2.resize(gesture_image, (170, 170))
-                alpha_gesture = gesture_image[:, :, 3]
-                gesture_image = cv2.cvtColor(gesture_image, cv2.COLOR_BGR2RGB)
-                overlay_image_alpha(image_np,
-                                    gesture_image[:, :, 0:3],
-                                    (image_np.shape[0] // 15, image_np.shape[1] // 15),
-                                    alpha_gesture / 255.0)
-
-                cv2.putText(image_np, pred, (200, 50),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.75, (77, 255, 9), 2)
-            except:
-                pass
-
-            ### IMPORT TRAINED GESTURE MODEL, AND CLASSIFICATION/OVERLAY
-            # output = model.predict_classes(img)
-            # cv2.draw(annotated_image)
-
+def draw_overlay_image(pred, overlay):
+    if not pred in gesture_images:
+        return None
+    gesture_image = gesture_images[pred]
+    if pred == 'afk':
+        gesture_image = cv2.resize(gesture_image, (overlay.shape[1], overlay.shape[0]))
+        overlay[:, :, :] = gesture_image
+    else:
+        gesture_image = cv2.resize(gesture_image, (170, 170))
+        alpha_gesture = gesture_image[:, :, 3]
+        overlay_image_alpha(overlay,
+                            gesture_image[:, :, 0:3],
+                            (overlay.shape[1] // 15, overlay.shape[0] // 15),
+                            alpha_gesture / 255.0)
 
 # Show fps value on image.
 def draw_fps_on_image(fps, image_np):

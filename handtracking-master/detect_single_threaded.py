@@ -1,13 +1,37 @@
 from utils import detector_utils as detector_utils
 import cv2
 import tensorflow.compat.v1 as tf
+import numpy as np
 import datetime
 import argparse
 
 detection_graph, sess = detector_utils.load_inference_graph()
 
-if __name__ == '__main__':
+def draw_frames(cap, n, apply_overlay=lambda f:f):
+    for i in range(n):
+        ret, frame = cap.read()
+        cv2.imshow('Camera Video', frame)
+    return frame
 
+from torchvision import transforms, models
+import torch
+model = models.mobilenet_v2()
+model.classifier = torch.nn.Sequential(torch.nn.Dropout(0.2),torch.nn.Linear(1280, 29))
+model.load_state_dict(torch.load('gesturenet_weights'))
+model.eval()
+idx2gesture = ['fist', 'palm', 'other', 'ok', 'other', 'fist', 'ok', 'other',
+    'other', 'other', 'other', 'peace', 'finger', 'other', 'other', 'other',
+    'ok', 'ok', 'other', 'other', 'fist', 'other', 'fist', 'finger', 'peace',
+    'palm', 'other', 'peace', 'finger']
+transform = transforms.Compose([
+    transforms.ToPILImage(),
+    transforms.ToTensor(),
+    transforms.Normalize([0.485, 0.456, 0.406],[0.229, 0.224, 0.225])])
+def classify(img): #expects 128*128*3 input
+    model_input = torch.unsqueeze(transform(img), dim=0)
+    return idx2gesture[model(model_input).argmax()]
+
+if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '-sth',
@@ -34,14 +58,14 @@ if __name__ == '__main__':
         '--width',
         dest='width',
         type=int,
-        default=320,
+        default=640,
         help='Width of the frames in the video stream.')
     parser.add_argument(
         '-ht',
         '--height',
         dest='height',
         type=int,
-        default=240,
+        default=480,
         help='Height of the frames in the video stream.')
     parser.add_argument(
         '-ds',
@@ -69,87 +93,55 @@ if __name__ == '__main__':
     cap = cv2.VideoCapture(args.video_source)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, args.width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, args.height)
-
-    #tf.config.experimental.set_per_process_memory_fraction(0.75)
-    #tf.config.experimental.set_per_process_memory_growth(True)
-
-    start_time = datetime.datetime.now()
-    num_frames = 0
     im_width, im_height = (cap.get(3), cap.get(4))
-    # max number of hands we want to detect/track
-    num_hands_detect = 2
 
-    cv2.namedWindow('Single-Threaded Detection', cv2.WINDOW_NORMAL)
+    cv2.namedWindow('Camera Video', cv2.WINDOW_NORMAL)
+    cv2.namedWindow('Overlay', cv2.WINDOW_NORMAL)
 
-    #set up gesture classifier
-    from torchvision import transforms, models
-    import torch
-    model = models.mobilenet_v2(pretrained=True)
-    model.classifier = torch.nn.Sequential(torch.nn.Dropout(0.2),torch.nn.Linear(1280, 29))
-    model.load_state_dict(torch.load('gesturenet_weights', map_location=torch.device('cpu')))
-    model.eval()
-    classes = ['A', 'B', 'C', 'D', 'del', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
-        'L', 'M', 'N', 'nothing', 'O', 'P', 'Q', 'R', 'S', 'space',
-        'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-    gestures = {'A':'fist', 'B':'palm', 'C':'other', 'D':'ok', 'del':'other', 'E':'fist', 'F':'ok', 'G':'other', 'H':'other', 'I':'other',
-        'J':'other', 'K':'peace','L':'finger', 'M':'other', 'N':'other', 'nothing':'other', 'O':'ok', 'P':'ok', 'Q':'other', 'R':'other',
-        'S':'fist', 'space':'other','T':'fist', 'U':'finger', 'V':'peace', 'W':'palm', 'X':'other', 'Y':'peace', 'Z':'finger'}
-    transform = transforms.Compose([
-        transforms.ToPILImage(),
-        transforms.ToTensor(),
-        transforms.Normalize([0.485, 0.456, 0.406],[0.229, 0.224, 0.225])])
-    def classify_gesture(img): #expects 128 * 128 bgr image
-        model_input = torch.unsqueeze(transform(img), dim=0)
-        return gestures[classes[model(model_input).argmax()]]
+    GESTURE_MEMORY_LENGTH = 5
+    AFK_COOLDOWN = 20
+    gesture_memory = ['other']*GESTURE_MEMORY_LENGTH
+    afk_countdown = AFK_COOLDOWN
 
     while True:
-        # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
-        ret, image_np_bgr = cap.read()
-        try:
-            # image_np = cv2.flip(image_np, 1)
-            image_np = cv2.cvtColor(image_np_bgr, cv2.COLOR_BGR2RGB)
-        except:
-            print("Error converting to RGB")
+        image_bgr = draw_frames(cap, 1)
+        image_np = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
+        overlay_canvas = np.ones(image_np.shape, np.uint8) * np.array([255, 0, 0], np.uint8)
+        face_seen = detector_utils.face_in_frame(image_np, overlay_canvas, True)
+        if face_seen:
+            afk_countdown = AFK_COOLDOWN
+        elif afk_countdown > 0:
+            afk_countdown -= 1
 
-        # Actual detection. Variable boxes contains the bounding box cordinates for hands detected,
-        # while scores contains the confidence for each of these boxes.
-        # Hint: If len(boxes) > 1 , you may assume you have found atleast one hand (within your score threshold)
-
-        boxes, scores = detector_utils.detect_objects(image_np,
-                                                      detection_graph, sess)
-
-        # draw bounding boxes on frame
-        # detector_utils.draw_box_on_image(num_hands_detect, args.score_thresh,
-        #                                  scores, boxes, im_width, im_height,
-        #                                  image_np)
-
-
-        detector_utils.draw_box_on_image(1, args.score_thresh,
-                                         scores, boxes, im_width, im_height,
-                                         image_np, classify_gesture)
-
-
-        # gesture_image = cv2.imread("overlay-icons/question.png")
-        # gesture_image = cv2.resize(gesture_image, image_np.shape[0], image_np.shape[1])
-        # image_np = cv2.addWeighted(image_np, 1, gesture_image, 0.5, 0)
-
-        # Calculate Frames per second (FPS)
-        num_frames += 1
-        elapsed_time = (datetime.datetime.now() - start_time).total_seconds()
-        fps = num_frames / elapsed_time
-
-        if (args.display > 0):
-            # Display FPS on frame
-            if (args.fps > 0):
-                detector_utils.draw_fps_on_image("FPS : " + str(int(fps)),
-                                                 image_np)
-
-            cv2.imshow('Single-Threaded Detection',
-                       cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR))
-
-            if cv2.waitKey(25) & 0xFF == ord('q'):
-                cv2.destroyAllWindows()
-                break
+        if afk_countdown == 0:
+            detector_utils.draw_overlay_image('afk', overlay_canvas)
         else:
-            print("frames processed: ", num_frames, "elapsed time: ",
-                  elapsed_time, "fps: ", str(int(fps)))
+            boxes, scores = detector_utils.detect_objects(image_np, detection_graph, sess)
+            box, score = boxes[0], scores[0]
+            if score > args.score_thresh:
+                box = detector_utils.adjust_bounding_box(box, im_width, im_height)
+                pred = detector_utils.draw_box_and_classify(box, image_bgr, classify,
+                    im_width, im_height, overlay_canvas, True)
+                gesture_memory.append(pred)
+                gesture_memory = gesture_memory[1:]
+
+        #decide what to draw
+        if afk_countdown == 0:
+            detector_utils.draw_overlay_image('afk', overlay_canvas)
+        else:
+            def count_then_recency(ges):
+                if ges == 'other':
+                    return 0
+                c = 0
+                for i, g in enumerate(gesture_memory):
+                    if g == ges:
+                        c += 1 + i*0.01
+                return c
+            current_gesture = max(gesture_memory, key=count_then_recency)
+            detector_utils.draw_overlay_image(current_gesture, overlay_canvas)
+
+        cv2.imshow('Overlay', overlay_canvas)
+    
+        if cv2.waitKey(25) & 0xFF == ord('q'):
+            cv2.destroyAllWindows()
+            break

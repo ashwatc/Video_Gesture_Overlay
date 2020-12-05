@@ -51,6 +51,37 @@ def load_inference_graph():
     print(">  ====== Hand Inference graph loaded.")
     return detection_graph, sess
 
+# inspired from https://stackoverflow.com/questions/14063070/overlay-a-smaller-image-on-a-larger-image-python-opencv
+def overlay_image_alpha(img, img_overlay, pos, alpha_mask):
+    """Overlay img_overlay on top of img at the position specified by
+    pos and blend using alpha_mask.
+
+    Alpha mask must contain values within the range [0, 1] and be the
+    same size as img_overlay.
+    """
+
+    x, y = pos
+
+    # Image ranges
+    y1, y2 = max(0, y), min(img.shape[0], y + img_overlay.shape[0])
+    x1, x2 = max(0, x), min(img.shape[1], x + img_overlay.shape[1])
+
+    # Overlay ranges
+    y1o, y2o = max(0, -y), min(img_overlay.shape[0], img.shape[0] - y)
+    x1o, x2o = max(0, -x), min(img_overlay.shape[1], img.shape[1] - x)
+
+    # Exit if nothing to do
+    if y1 >= y2 or x1 >= x2 or y1o >= y2o or x1o >= x2o:
+        return
+
+    channels = img.shape[2]
+
+    alpha = alpha_mask[y1o:y2o, x1o:x2o]
+    alpha_inv = 1.0 - alpha
+
+    for c in range(channels):
+        img[y1:y2, x1:x2, c] = (alpha * img_overlay[y1o:y2o, x1o:x2o, c] +
+                                alpha_inv * img[y1:y2, x1:x2, c])
 
 # draw the detected bounding boxes on the images
 # You can modify this to also draw a label.
@@ -62,11 +93,11 @@ def draw_box_on_image(num_hands_detect, score_thresh, scores, boxes, im_width, i
     AFK = False
 
     if len(faces) != 0:
-        AFK = True
+        AFK = False
         for (x, y, w, h) in faces:
             cv2.rectangle(image_np, (x, y), (x + w, y + h), (255, 0, 0), 3)
     else:
-        AFK = False
+        AFK = True
 
     for i in range(num_hands_detect):
         if (scores[i] > score_thresh):
@@ -96,13 +127,6 @@ def draw_box_on_image(num_hands_detect, score_thresh, scores, boxes, im_width, i
             p2 = (int(right), int(bottom))
             cv2.rectangle(image_np, p1, p2, (77, 255, 9), 3, 1)
 
-            ### OVERLAY PNG IMAGE OVER FRAME
-            gesture_image = cv2.imread("overlay-icons/question.png")
-            gesture_image = cv2.resize(gesture_image, (gesture_image.shape[1] // 4, gesture_image.shape[0] // 4))
-            background_mask = np.zeros((image_np.shape[0], image_np.shape[1], 3), dtype=np.uint8)
-            background_mask[0:gesture_image.shape[0], 0:gesture_image.shape[1], :] = gesture_image
-            #cv2.addWeighted(background_mask, 1, image_np, 1, 0, image_np)
-
             top, bottom, left, right = map(int, (top, bottom, left, right))
             #print(top, bottom, left, right)
             img_h, img_w, img_c = image_np.shape
@@ -115,6 +139,25 @@ def draw_box_on_image(num_hands_detect, score_thresh, scores, boxes, im_width, i
                 hand = padded[ top-tpad:bottom-tpad, left-lpad:right-lpad, : ]
                 hand = cv2.resize(hand, (128, 128))
                 pred = classify(hand)
+
+                ### OVERLAY PNG IMAGE OVER FRAME
+                if AFK:
+                    gesture_image = cv2.imread("overlay-icons/afk.png", cv2.IMREAD_UNCHANGED)
+                else:
+                    if pred == "fist": gesture_image = cv2.imread("overlay-icons/no.png", cv2.IMREAD_UNCHANGED)
+                    if pred == "palm": gesture_image = cv2.imread("overlay-icons/question.png", cv2.IMREAD_UNCHANGED)
+                    if pred == "ok": gesture_image = cv2.imread("overlay-icons/yes.png", cv2.IMREAD_UNCHANGED)
+                    if pred == "peace": gesture_image = cv2.imread("overlay-icons/bye.png", cv2.IMREAD_UNCHANGED)
+                    if pred == "finger": gesture_image = cv2.imread("overlay-icons/comment.png", cv2.IMREAD_UNCHANGED)
+
+                if AFK: gesture_image = cv2.resize(gesture_image, (image_np.shape[0], image_np.shape[1]))
+                else: gesture_image = cv2.resize(gesture_image, (170, 170))
+                alpha_gesture = gesture_image[:, :, 3]
+                gesture_image = cv2.cvtColor(gesture_image, cv2.COLOR_BGR2RGB)
+                overlay_image_alpha(image_np,
+                                    gesture_image[:, :, 0:3],
+                                    (image_np.shape[0] // 15, image_np.shape[1] // 15),
+                                    alpha_gesture / 255.0)
 
                 cv2.putText(image_np, pred, (200, 50),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.75, (77, 255, 9), 2)

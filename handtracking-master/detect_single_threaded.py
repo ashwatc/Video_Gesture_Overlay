@@ -27,7 +27,7 @@ if __name__ == '__main__':
         '-src',
         '--source',
         dest='video_source',
-        default=0,
+        default=1,
         help='Device index of the camera.')
     parser.add_argument(
         '-wd',
@@ -86,14 +86,14 @@ if __name__ == '__main__':
     import torch
     model = models.mobilenet_v2(pretrained=True)
     model.classifier = torch.nn.Sequential(torch.nn.Dropout(0.2),torch.nn.Linear(1280, 29))
-    model.load_state_dict(torch.load('gesturenet_weights'))
+    model.load_state_dict(torch.load('gesturenet_weights', map_location=torch.device('cpu')))
     model.eval()
     classes = ['A', 'B', 'C', 'D', 'del', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
         'L', 'M', 'N', 'nothing', 'O', 'P', 'Q', 'R', 'S', 'space',
         'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
     gestures = {'A':'fist', 'B':'palm', 'C':'other', 'D':'ok', 'del':'other', 'E':'fist', 'F':'ok', 'G':'other', 'H':'other', 'I':'other',
-        'J':'other', 'K':'peace','L':'finger', 'M':'down', 'N':'down', 'nothing':'other', 'O':'ok', 'P':'ok', 'Q':'other', 'R':'other',
-        'S':'fist', 'space':'other','T':'fist', 'U':'finger', 'V':'peace', 'W':'peace', 'X':'finger', 'Y':'peace', 'Z':'finger'}
+        'J':'other', 'K':'peace','L':'finger', 'M':'other', 'N':'other', 'nothing':'other', 'O':'ok', 'P':'ok', 'Q':'other', 'R':'other',
+        'S':'fist', 'space':'other','T':'fist', 'U':'finger', 'V':'peace', 'W':'palm', 'X':'other', 'Y':'peace', 'Z':'finger'}
     transform = transforms.Compose([
         transforms.ToPILImage(),
         transforms.ToTensor(),

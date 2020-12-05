@@ -45,8 +45,8 @@ def load_inference_graph():
             tf.import_graph_def(od_graph_def, name='')
         #config = tf.ConfigProto()
         #config.gpu_options.per_process_gpu_memory_fraction = 0.75
-        gpus = tf.config.experimental.list_physical_devices('GPU')
-        tf.config.experimental.set_memory_growth(gpus[0], True)
+        # gpus = tf.config.experimental.list_physical_devices('GPU')
+        # tf.config.experimental.set_memory_growth(gpus[0], True)
         sess = tf.Session(graph=detection_graph)#, config=config)
     print(">  ====== Hand Inference graph loaded.")
     return detection_graph, sess
@@ -55,6 +55,19 @@ def load_inference_graph():
 # draw the detected bounding boxes on the images
 # You can modify this to also draw a label.
 def draw_box_on_image(num_hands_detect, score_thresh, scores, boxes, im_width, im_height, image_np, classify):
+    # face detection
+    face_cascade = cv2.CascadeClassifier('utils/haarcascade_face.xml')
+    gray = cv2.cvtColor(image_np, cv2.COLOR_RGB2GRAY)
+    faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+    AFK = False
+
+    if len(faces) != 0:
+        AFK = True
+        for (x, y, w, h) in faces:
+            cv2.rectangle(image_np, (x, y), (x + w, y + h), (255, 0, 0), 3)
+    else:
+        AFK = False
+
     for i in range(num_hands_detect):
         if (scores[i] > score_thresh):
             (left, right, top, bottom) = (boxes[i][1] * im_width, boxes[i][3] * im_width,
@@ -74,10 +87,10 @@ def draw_box_on_image(num_hands_detect, score_thresh, scores, boxes, im_width, i
 
             width = right - left
             height = bottom - top
-            right += width // 4
-            left -= width // 4
-            bottom += height // 4
-            top -= height // 4
+            right += width // 8
+            left -= width // 8
+            bottom += height // 8
+            top -= height // 8
 
             p1 = (int(left), int(top))
             p2 = (int(right), int(bottom))

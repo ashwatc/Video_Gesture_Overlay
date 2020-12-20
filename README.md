@@ -1,1 +1,1 @@
-# Video_Gesture_Overlay
+# Video Gesture Overlay for Zoom Annotations

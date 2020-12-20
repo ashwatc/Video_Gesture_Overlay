@@ -1,1 +1,1 @@
-# Video Gesture Overlay for Zoom Annotations
+# Video Gesture Overlay for Zoom Annotations & Emjoi Reacts

@@ -54,8 +54,8 @@ def load_inference_graph():
             od_graph_def.ParseFromString(serialized_graph)
             tf.import_graph_def(od_graph_def, name='')
 
-        gpus = tf.config.experimental.list_physical_devices('GPU')
-        tf.config.experimental.set_memory_growth(gpus[0], True)
+        # gpus = tf.config.experimental.list_physical_devices('GPU')
+        # tf.config.experimental.set_memory_growth(gpus[0], True)
         sess = tf.Session(graph=detection_graph)#, config=config)
 
     print(">  ====== Hand Inference graph loaded.")

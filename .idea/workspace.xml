@@ -2,45 +2,78 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d75ea806-1953-415b-a860-e2621f9445ae" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/handtracking-master/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/detect_multi_threaded.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/docs/handtrack.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/egohands_dataset_clean.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/egohands_dataset_clean_4classes.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/hand_inference_graph/frozen_inference_graph_141 14-51-46-798.pb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/images/accuracy.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/images/chess1.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/images/chess2.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/images/chess3.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/images/compare.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/images/doodle.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/images/egohandstrain.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/images/general.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/images/hand1.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/images/hand2.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/images/hand3.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdlitemobilenetv2/checkpoint" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdlitemobilenetv2/frozen_inference_graph.pb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdlitemobilenetv2/model.ckpt.data-00000-of-00001" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdlitemobilenetv2/model.ckpt.index" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdlitemobilenetv2/model.ckpt.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdlitemobilenetv2/pipeline.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdlitemobilenetv2/saved_model/saved_model.pb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdmobilenetv1/model.ckpt-200002.data-00000-of-00001" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdmobilenetv1/model.ckpt-200002.index" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdmobilenetv1/model.ckpt-200002.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdmobilenetv1/ssd_mobilenet_v1_coco.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay-icons/afk.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay-icons/bye.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay-icons/comment.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay-icons/no.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay-icons/perfect.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay-icons/question.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay-icons/stop.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay-icons/yes.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/result.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/utils/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/handtracking-master/utils/detector_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/handtracking-master/utils/detector_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/detect_single_threaded.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/gesturenet_weights" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/hand_inference_graph/frozen_inference_graph.pb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/hand_inference_graph/hand_label_map.pbtxt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay_icons/afk.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay_icons/bye.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay_icons/comment.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay_icons/no.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay_icons/perfect.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay_icons/question.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay_icons/stop.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay_icons/yes.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/BUILD" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/anchor_generator.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/anchor_generator_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/argmax_matcher.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/argmax_matcher_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/bipartite_matcher.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/bipartite_matcher_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/box_coder.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/box_coder_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/box_predictor.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/box_predictor_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/eval.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/eval_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/faster_rcnn.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/faster_rcnn_box_coder.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/faster_rcnn_box_coder_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/faster_rcnn_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/grid_anchor_generator.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/grid_anchor_generator_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/hyperparams.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/hyperparams_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/image_resizer.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/image_resizer_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/input_reader.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/input_reader_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/losses.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/losses_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/matcher.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/matcher_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/mean_stddev_box_coder.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/mean_stddev_box_coder_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/model.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/model_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/optimizer.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/optimizer_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/pipeline.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/pipeline_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/post_processing.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/post_processing_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/preprocessor.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/preprocessor_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/region_similarity_calculator.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/region_similarity_calculator_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/square_box_coder.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/square_box_coder_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/ssd.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/ssd_anchor_generator.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/ssd_anchor_generator_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/ssd_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/string_int_label_map.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/string_int_label_map_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/train.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/protos/train_pb2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/utils/detector_utils.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/utils/haarcascade_face.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/utils/label_map_util.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,6 +99,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/detection_overlay" />
       <recent name="$PROJECT_DIR$/Detection_Overlay" />
     </key>
   </component>

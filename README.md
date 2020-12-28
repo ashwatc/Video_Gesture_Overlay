@@ -9,7 +9,7 @@ As students at UC Berkeley all our classes were held on Zoom amid the COVID-19 p
 We used the "ASL Alphabet" dataset from Kaggle which can be found [here](https://www.kaggle.com/grassknoted/asl-alphabet).
 
 # Visual Model
-![](finalDemo.gif)
+![](readme_image_assets/finalDemo.gif)
 
 # Credits
 Hand Tracking Module: Victor Dibia, HandTrack: A Library For Prototyping Real-time Hand Tracking Interfaces using Convolutional Neural Networks, https://github.com/victordibia/handtracking

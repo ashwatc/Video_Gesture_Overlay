@@ -1,4 +1,4 @@
-# Machine Learning Video Gesture Overlay for Emoji Reacts on Zoom
+# Machine learning-based video gesture overlay for quick reacts on Zoom
 # About
 Video Gesture Overlay is a machine learning and computer vision based application that is able to recognize hand gestures and facial tracking, and subsequently display corresponding reacts/icons overlaid on the user’s camera feed. 
 

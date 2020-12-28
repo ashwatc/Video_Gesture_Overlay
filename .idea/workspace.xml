@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="d75ea806-1953-415b-a860-e2621f9445ae" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/handtracking-master/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/detect_multi_threaded.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/docs/handtrack.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/egohands_dataset_clean.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/egohands_dataset_clean_4classes.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/hand_inference_graph/frozen_inference_graph_141 14-51-46-798.pb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/images/accuracy.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/images/chess1.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/images/chess2.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/images/chess3.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/images/compare.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/images/doodle.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/images/egohandstrain.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/images/general.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/images/hand1.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/images/hand2.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/images/hand3.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdlitemobilenetv2/checkpoint" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdlitemobilenetv2/frozen_inference_graph.pb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdlitemobilenetv2/model.ckpt.data-00000-of-00001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdlitemobilenetv2/model.ckpt.index" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdlitemobilenetv2/model.ckpt.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdlitemobilenetv2/pipeline.config" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdlitemobilenetv2/saved_model/saved_model.pb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdmobilenetv1/model.ckpt-200002.data-00000-of-00001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdmobilenetv1/model.ckpt-200002.index" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdmobilenetv1/model.ckpt-200002.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/model-checkpoint/ssdmobilenetv1/ssd_mobilenet_v1_coco.config" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay-icons/afk.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay-icons/bye.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay-icons/comment.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay-icons/no.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay-icons/perfect.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay-icons/question.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay-icons/stop.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/overlay-icons/yes.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/result.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/utils/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/handtracking-master/utils/detector_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/handtracking-master/utils/detector_utils.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1lDcISQacULmPQZBb1TkWc4OOjZ" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="TERMINAL_CUSTOM_COMMANDS_GOT_IT" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Detection_Overlay" />
+    </key>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d75ea806-1953-415b-a860-e2621f9445ae" name="Default Changelist" comment="" />
+      <created>1607135022365</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1607135022365</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="660" y="330" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1609125946599">
+      <screen x="0" y="25" width="1920" height="999" />
+    </state>
+    <state x="660" y="330" key="#com.intellij.fileTypes.FileTypeChooser/0.25.1920.999@0.25.1920.999" timestamp="1609125946599" />
+  </component>
+</project>

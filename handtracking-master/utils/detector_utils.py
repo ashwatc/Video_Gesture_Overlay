@@ -33,12 +33,12 @@ category_index = label_map_util.create_category_index(categories)
 #initialize face haar cascade
 face_cascade = cv2.CascadeClassifier('utils/haarcascade_face.xml')
 
-gesture_images = {'fist':cv2.imread("overlay-icons/no.png", cv2.IMREAD_UNCHANGED),
-    'palm':cv2.imread("overlay-icons/question.png", cv2.IMREAD_UNCHANGED),
-    'ok':cv2.imread("overlay-icons/yes.png", cv2.IMREAD_UNCHANGED),
-    'peace':cv2.imread("overlay-icons/bye.png", cv2.IMREAD_UNCHANGED),
-    'finger':cv2.imread("overlay-icons/comment.png", cv2.IMREAD_UNCHANGED),
-    'afk':cv2.imread("overlay-icons/afk.png", cv2.IMREAD_UNCHANGED)}
+gesture_images = {'fist':cv2.imread("overlay_icons/no.png", cv2.IMREAD_UNCHANGED),
+    'palm':cv2.imread("overlay_icons/question.png", cv2.IMREAD_UNCHANGED),
+    'ok':cv2.imread("overlay_icons/yes.png", cv2.IMREAD_UNCHANGED),
+    'peace':cv2.imread("overlay_icons/bye.png", cv2.IMREAD_UNCHANGED),
+    'finger':cv2.imread("overlay_icons/comment.png", cv2.IMREAD_UNCHANGED),
+    'afk':cv2.imread("overlay_icons/afk.png", cv2.IMREAD_UNCHANGED)}
 for ges in ('palm', 'ok', 'peace', 'finger', 'fist'):
     gesture_images[ges] = cv2.resize(gesture_images[ges], (170, 170))
 

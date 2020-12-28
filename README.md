@@ -20,4 +20,4 @@ Hand Tracking Module: Victor Dibia, HandTrack: A Library For Prototyping Real-ti
 # Extra
 Our project was also featured on the official Weights & Biases YouTube channel! Check out the video [here](https://youtu.be/WxVq0wJKh8o). The slides used in the presentation can be found [here](https://docs.google.com/presentation/d/1JEVe57uOlkCGvYdJILc8LzPAOJkpn-YeNbhT-dWdwTI/edit?usp=sharing).
 
-![](mlab-logo-horizontal_resize.png)
+![](readme_image_assets/mlab-logo-horizontal_resize.png)

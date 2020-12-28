@@ -16,4 +16,6 @@ Hand Tracking Module: Victor Dibia, HandTrack: A Library For Prototyping Real-ti
 
 - Created by Ashwat Chidambaram, Andre He, Aryia Dattamajumdar, and Sarvasv Kulpati
 - Machine Learning at Berkeley (ML@B), as part of the New Member Education Program (NMEP) 
+
+
 ![Alt text](https://ml.berkeley.edu/static/media/mlab-logo-horizontal-small.6583ac1a.png "Optional title")

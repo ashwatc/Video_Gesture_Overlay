@@ -1,7 +1,3 @@
-import sys
-import os
-os.chdir("./handtracking_master")
-# sys.path.insert(1, 'handtracking_master')
 from utils import detector_utils
 import cv2
 import tensorflow.compat.v1 as tf
@@ -13,7 +9,7 @@ from torchvision import transforms, models
 
 model = models.mobilenet_v2()
 model.classifier = torch.nn.Sequential(torch.nn.Dropout(0.2),torch.nn.Linear(1280, 29))
-model.load_state_dict(torch.load('gesturenet_weights', map_location=torch.device('cpu')))
+model.load_state_dict(torch.load('utils/gesturenet_weights', map_location=torch.device('cpu')))
 model.eval()
 idx2gesture = ['fist', 'palm', 'other', 'ok', 'other', 'fist', 'ok', 'other',
     'other', 'other', 'other', 'peace', 'finger', 'other', 'other', 'other',
@@ -47,7 +43,7 @@ def main(args):
         # image_bgr = cv2.flip(image_bgr, 1)
         image_np = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
         overlay_canvas = image_bgr
-        face_seen = detector_utils.face_in_frame(image_np, overlay_canvas, True)
+        face_seen = detector_utils.face_in_frame(image_np, overlay_canvas, False)
         if face_seen:
             afk_countdown = AFK_COOLDOWN
         elif afk_countdown > 0:
@@ -62,7 +58,7 @@ def main(args):
             if score > args.score_thresh:
                 box = detector_utils.adjust_bounding_box(box, im_width, im_height)
                 pred = detector_utils.draw_box_and_classify(box, image_bgr, classify,
-                    im_width, im_height, overlay_canvas, True)
+                    im_width, im_height, overlay_canvas, False)
                 gesture_memory.append(pred)
                 gesture_memory = gesture_memory[1:]
 

@@ -18,7 +18,7 @@ Hand Tracking Module: Victor Dibia, HandTrack: A Library For Prototyping Real-ti
 - [Machine Learning at Berkeley (ML@B)](https://ml.berkeley.edu/), as part of the New Member Education Program (NMEP) 
 
 # Extra
-Our project was also featured on the official Weights & Biases YouTube channel! Check out the salon [here](https://youtu.be/WxVq0wJKh8o). The slides used in the presentation can be found [here](https://docs.google.com/presentation/d/1JEVe57uOlkCGvYdJILc8LzPAOJkpn-YeNbhT-dWdwTI/edit?usp=sharing).
+Our project was also featured on the official Weights & Biases YouTube channel! Check out the video [here](https://youtu.be/WxVq0wJKh8o). The slides used in the presentation can be found [here](https://docs.google.com/presentation/d/1JEVe57uOlkCGvYdJILc8LzPAOJkpn-YeNbhT-dWdwTI/edit?usp=sharing).
 
 
 ![Alt text](https://ml.berkeley.edu/blog/media/mlab-logo-horizontal.png "Optional title")

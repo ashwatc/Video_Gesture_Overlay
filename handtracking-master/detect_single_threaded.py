@@ -10,7 +10,7 @@ detection_graph, sess = detector_utils.load_inference_graph()
 def draw_frames(cap, n, apply_overlay=lambda f:f):
     for i in range(n):
         ret, frame = cap.read()
-        cv2.imshow('Camera Video', frame)
+        #cv2.imshow('Camera Video', frame)
     return frame
 
 from torchvision import transforms, models
@@ -51,21 +51,21 @@ if __name__ == '__main__':
         '-src',
         '--source',
         dest='video_source',
-        default=1,
+        default=0,
         help='Device index of the camera.')
     parser.add_argument(
         '-wd',
         '--width',
         dest='width',
         type=int,
-        default=640,
+        default=1000,
         help='Width of the frames in the video stream.')
     parser.add_argument(
         '-ht',
         '--height',
         dest='height',
         type=int,
-        default=480,
+        default=600,
         help='Height of the frames in the video stream.')
     parser.add_argument(
         '-ds',
@@ -95,19 +95,20 @@ if __name__ == '__main__':
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, args.height)
     im_width, im_height = (cap.get(3), cap.get(4))
 
-    cv2.namedWindow('Camera Video', cv2.WINDOW_NORMAL)
+    #cv2.namedWindow('Camera Video', cv2.WINDOW_NORMAL)
     cv2.namedWindow('Overlay', cv2.WINDOW_NORMAL)
 
-    GESTURE_MEMORY_LENGTH = 5
+    GESTURE_MEMORY_LENGTH = 6
     AFK_COOLDOWN = 20
     gesture_memory = ['other']*GESTURE_MEMORY_LENGTH
     afk_countdown = AFK_COOLDOWN
 
     while True:
         image_bgr = draw_frames(cap, 1)
+        image_bgr = cv2.flip(image_bgr, 1)
         image_np = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
-        overlay_canvas = np.ones(image_np.shape, np.uint8) * np.array([255, 0, 0], np.uint8)
-        face_seen = detector_utils.face_in_frame(image_np, overlay_canvas, True)
+        overlay_canvas = image_bgr#np.ones(image_np.shape, np.uint8) * np.array([255, 0, 0], np.uint8)
+        face_seen = detector_utils.face_in_frame(image_np, overlay_canvas, False)
         if face_seen:
             afk_countdown = AFK_COOLDOWN
         elif afk_countdown > 0:
@@ -118,10 +119,11 @@ if __name__ == '__main__':
         else:
             boxes, scores = detector_utils.detect_objects(image_np, detection_graph, sess)
             box, score = boxes[0], scores[0]
+
             if score > args.score_thresh:
                 box = detector_utils.adjust_bounding_box(box, im_width, im_height)
                 pred = detector_utils.draw_box_and_classify(box, image_bgr, classify,
-                    im_width, im_height, overlay_canvas, True)
+                    im_width, im_height, overlay_canvas, False)
                 gesture_memory.append(pred)
                 gesture_memory = gesture_memory[1:]
 
@@ -141,7 +143,7 @@ if __name__ == '__main__':
             detector_utils.draw_overlay_image(current_gesture, overlay_canvas)
 
         cv2.imshow('Overlay', overlay_canvas)
-    
+
         if cv2.waitKey(25) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
             break

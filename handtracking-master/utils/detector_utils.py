@@ -115,19 +115,25 @@ def adjust_bounding_box(box, im_width, im_height):
         diff = height - width
         right += diff / 2
         left -= diff / 2
+
+    m = 2
     width = right - left
     height = bottom - top
-    right += width / 6
-    left -= width / 6
-    bottom += height / 6
-    top -= height / 6
+    right += width / m
+    left -= width / m
+    bottom += height / m
+    top -= height / m
+
+    ch, cv = (left+right)/2, (top+bottom)/2
+    sidelen = min(ch, cv, im_width-ch, im_height-cv, ch-left, cv-top)
+    left, right, top, bottom = ch-sidelen, ch+sidelen, cv-sidelen, cv+sidelen
 
     #cap box Size
-    max_side_len = min(im_height, im_width)/2
+    """max_side_len = min(im_height, im_width)/2
     if right-left > max_side_len or bottom-top > max_side_len:
         vcenter, hcenter = (top+bottom)//2, (right+left)//2
         top, bottom = vcenter-max_side_len//2, vcenter+max_side_len//2
-        left, right = hcenter-max_side_len//2, hcenter+max_side_len//2
+        left, right = hcenter-max_side_len//2, hcenter+max_side_len//2"""
     top, bottom, left, right = map(int, (top, bottom, left, right))
     return [left, right, top, bottom]
 
